@@ -18,4 +18,16 @@ docker-compose up -d \
 && docker-compose exec rev-proxy docker swarm join --token $token manager-1:2377
 ```
 
+**Teardown**
+
 `docker-compose down && sudo rm -rf docker`
+
+**Images for experimentation/testing**
+
+https://github.com/dockersamples
+
+https://github.com/katacoda
+
+https://hub.docker.com/r/benhall/dig
+
+`docker run --name dig --network some-network benhall/dig dig service`

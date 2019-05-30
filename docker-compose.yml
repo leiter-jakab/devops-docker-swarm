@@ -1,0 +1,52 @@
+version: "3"
+services:
+  manager-1:
+    image: docker:dind
+    privileged: true
+    volumes:
+      - "./docker/manager-1:/var/lib/docker"
+    hostname: manager-1
+  manager-2:
+    image: docker:dind
+    privileged: true
+    volumes:
+      - "./docker/manager-2:/var/lib/docker"
+    hostname: manager-2
+  manager-3:
+    image: docker:dind
+    privileged: true
+    volumes:
+      - "./docker/manager-3:/var/lib/docker"
+    hostname: manager-3
+  worker-1:
+    image: docker:dind
+    privileged: true
+    volumes:
+      - "./docker/worker-1:/var/lib/docker"
+    hostname: worker-1
+  worker-2:
+    image: docker:dind
+    privileged: true
+    volumes:
+      - "./docker/worker-2:/var/lib/docker"
+    hostname: worker-2
+  worker-3:
+    image: docker:dind
+    privileged: true
+    volumes:
+      - "./docker/worker-3:/var/lib/docker"
+    hostname: worker-3
+  worker-4:
+    image: docker:dind
+    privileged: true
+    volumes:
+      - "./docker/worker-4:/var/lib/docker"
+    hostname: worker-4
+  rev-proxy:
+    image: docker:dind
+    privileged: true
+    hostname: rev-proxy
+    ports:
+      - 8080:80
+      - 8433:433
+

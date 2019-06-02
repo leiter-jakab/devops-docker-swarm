@@ -55,4 +55,4 @@ services:
     hostname: proxy-2
     ports:
       - 9080:80
-      - 9433:43
+      - 9433:433

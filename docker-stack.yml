@@ -1,0 +1,44 @@
+  version: "3"
+services:
+  test:
+    image: nginx
+    networks:
+      - front-end
+    volumes:
+      - app-data:/home
+    deploy:
+      labels:
+        xyz.tgergo.component: app
+      replicas: 6
+      placement:
+        constraints:
+          - node.role != manager
+        # preferences:
+          # - spread: node.labels.zone
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: 50M
+        reservations:
+          cpus: "0.2"
+          memory: 20M
+      update_config:
+        parallelism: 2
+        delay: 5s
+        monitor: 30s
+        failure_action: rollback
+        # max_failure_ratio: 2
+      # rollback_config:
+        # parallelism: 2
+        # delay: 5s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 30s
+
+networks:
+  front-end:
+  back-end:
+volumes:
+  app-data

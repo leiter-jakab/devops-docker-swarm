@@ -25,6 +25,12 @@ for((i=1;i<3;i++));do docker-compose exec manager-1 docker node update --label-a
 for((i=3;i<5;i++));do docker-compose exec manager-1 docker node update --label-add zone=west worker-$i; done
 ```
 
+**Copy configurations**
+
+```bash
+docker cp deployment/ $(docker ps --filter name=manager-1 -q):/
+```
+
 **Teardown**
 
 `docker-compose down && sudo rm -rf docker`

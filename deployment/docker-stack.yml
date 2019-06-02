@@ -1,0 +1,75 @@
+version: "3.7"
+services:
+  web-app:
+    image: nginx
+    networks:
+      - front-end
+      - proxy
+    volumes:
+      - app-data:/home
+    deploy:
+      labels:
+        xyz.tgergo.component: app
+      replicas: 6
+      placement:
+        constraints:
+          - node.role != manager
+          - node.labels.role != proxy
+        preferences:
+          - spread: node.labels.zone
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: 50M
+        reservations:
+          cpus: "0.2"
+          memory: 20M
+      update_config:
+        parallelism: 2
+        delay: 5s
+        monitor: 30s
+        failure_action: rollback
+      rollback_config:
+        parallelism: 2
+        delay: 5s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 30s
+  proxy:
+    image: nginx
+    networks:
+      - proxy
+    ports:
+      - 80:80
+      - 443:443
+    configs:
+      - source: proxy-config
+        target: /etc/nginx/nginx.conf
+    deploy:
+      labels:
+        xyz.tgergo.component: proxy
+      replicas: 4
+      placement:
+        constraints:
+          - node.labels.role == proxy
+        preferences:
+          - spread: node.labels.zone
+      update_config:
+        parallelism: 1
+        delay: 5s
+        monitor: 30s
+        failure_action: rollback
+      restart_policy:
+        condition: any
+
+networks:
+  proxy:
+  front-end:
+  back-end:
+volumes:
+  app-data:
+configs:
+  proxy-config:
+    external: true

@@ -42,11 +42,17 @@ services:
     volumes:
       - "./docker/worker-4:/var/lib/docker"
     hostname: worker-4
-  rev-proxy:
+  proxy-1:
     image: docker:dind
     privileged: true
-    hostname: rev-proxy
+    hostname: proxy-1
     ports:
       - 8080:80
       - 8433:433
-
+  proxy-2:
+    image: docker:dind
+    privileged: true
+    hostname: proxy-2
+    ports:
+      - 9080:80
+      - 9433:43

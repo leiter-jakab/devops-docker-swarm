@@ -2,6 +2,8 @@ version: "3"
 services:
   manager-1:
     image: docker:dind
+    ports:
+      - 8080:8080
     privileged: true
     volumes:
       - "./docker/manager-1:/var/lib/docker"
@@ -47,12 +49,12 @@ services:
     privileged: true
     hostname: proxy-1
     ports:
-      - 8080:80
-      - 8433:433
+      - 10080:80
+      - 10433:433
   proxy-2:
     image: docker:dind
     privileged: true
     hostname: proxy-2
     ports:
-      - 9080:80
-      - 9433:433
+      - 11080:80
+      - 11433:433

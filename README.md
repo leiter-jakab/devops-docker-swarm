@@ -19,21 +19,31 @@ docker-compose up -d \
 ```
 
 ```bash
-docker-compose exec manager-1 docker node update --label-add role=proxy --label-add zone=east proxy-1; \
-docker-compose exec manager-1 docker node update --label-add role=proxy --label-add zone=west proxy-2; \
-for((i=1;i<3;i++));do docker-compose exec manager-1 docker node update --label-add zone=east worker-$i; done; \
-for((i=3;i<5;i++));do docker-compose exec manager-1 docker node update --label-add zone=west worker-$i; done
+docker-compose exec manager-1 docker node update --label-add xyz.tgergo.function=proxy --label-add xyz.tgergo.zone=east proxy-1; \
+docker-compose exec manager-1 docker node update --label-add xyz.tgergo.function=proxy --label-add xyz.tgergo.zone=west proxy-2; \
+for((i=1;i<3;i++));do docker-compose exec manager-1 docker node update --label-add xyz.tgergo.zone=east worker-$i; done; \
+for((i=3;i<5;i++));do docker-compose exec manager-1 docker node update --label-add xyz.tgergo.zone=west worker-$i; done
+```
+
+**Install packages**
+
+```bash
+for((i=1;i<4;i++));do docker-compose exec manager-$i apk add curl git; done; \
+for((i=1;i<5;i++));do docker-compose exec worker-$i apk add curl; done
 ```
 
 **Copy configurations**
 
 ```bash
-docker cp deployment/ $(docker ps --filter name=manager-1 -q):/
+docker cp deployment/ $(docker ps --filter name=manager-1 -q):/; \
+docker-compose exec manager-1 docker config create -l porxy proxy-config deployment/nginx.conf
 ```
 
 **Teardown**
 
-`docker-compose down && sudo rm -rf docker`
+```bash
+docker-compose down && sudo rm -rf docker
+```
 
 **Images for experimentation/testing**
 
